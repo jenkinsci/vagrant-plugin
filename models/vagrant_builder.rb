@@ -85,7 +85,7 @@ module Vagrant
     def perform(build, launcher, listener)
       @vagrant = build.env[:vagrant]
       if @vagrant.nil?
-        built.halt "OH CRAP! I don't seem to have a Vagrant instance"
+        build.halt "OH CRAP! I don't seem to have a Vagrant instance"
       end
 
       unless @vagrant.primary_vm.state == :running
