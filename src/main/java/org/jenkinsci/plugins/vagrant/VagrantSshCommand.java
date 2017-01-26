@@ -76,17 +76,34 @@ public class VagrantSshCommand extends Builder {
     this.wrapper.setBuild(build);
     this.wrapper.setLauncher(launcher);
     this.wrapper.setListener(listener);
-    List<String> arg = new ArrayList<String>();
-
-    arg.add("--command");
-    if (this.asRoot) {
-      arg.add("sudo " + this.command);
-    } else {
-      arg.add(this.command);
-    }
-
     try {
-      return this.wrapper.executeCommand("ssh", arg);
+
+        String[] commands = this.command.split(System.lineSeparator());
+
+        boolean result = true;
+
+        for (String com : commands) {
+
+            if (com.startsWith("#")) {
+                continue;
+            }
+
+            List<String> arg = new ArrayList<String>();
+
+            arg.add("--command");
+            if (this.asRoot) {
+                arg.add("sudo " + com);
+            } else {
+                arg.add(com);
+            }
+
+            result = result && this.wrapper.executeCommand("ssh", arg);
+
+            if (!result) {
+                return result;
+            }
+        }
+        return result;
     } catch (IOException e) {
       wrapper.log("Error starting up vagrant, caught IOException, message: " + e.getMessage());
       wrapper.log(e);

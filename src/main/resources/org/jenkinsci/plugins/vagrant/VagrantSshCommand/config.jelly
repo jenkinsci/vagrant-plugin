@@ -8,7 +8,7 @@
     <f:textbox default=""/>
   </f:entry>
   <f:entry title="Command" field="command">
-    <f:textbox default=""/>
+    <f:textarea default=""/>
   </f:entry>
   <f:entry title="Run as root" field="asRoot">
     <f:checkbox/>
