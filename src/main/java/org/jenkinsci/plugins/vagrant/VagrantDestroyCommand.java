@@ -5,8 +5,10 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
-import hudson.model.Descriptor;
-import hudson.tasks.Builder;
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Publisher;
+import hudson.tasks.Recorder;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ import java.util.List;
 /**
 * Created by elad on 9/18/14.
 */
-public class VagrantDestroyCommand extends Builder {
+public class VagrantDestroyCommand extends Recorder {
   private VagrantWrapper wrapper;
 
   @Extension
@@ -37,7 +39,7 @@ public class VagrantDestroyCommand extends Builder {
   }
 
   @Override
-  public Descriptor<Builder> getDescriptor() {
+  public BuildStepDescriptor<Publisher> getDescriptor() {
     return DESCRIPTOR;
   }
 
@@ -62,7 +64,12 @@ public class VagrantDestroyCommand extends Builder {
     }
   }
 
-  public static final class VagrantDestroyCommandDescriptor extends Descriptor<Builder> {
+  @Override
+  public BuildStepMonitor getRequiredMonitorService() {
+    return BuildStepMonitor.NONE;
+  }
+
+  public static final class VagrantDestroyCommandDescriptor extends BuildStepDescriptor<Publisher> {
 
     public String getDisplayName() {
       return "Destroy a Vagrant VM";
